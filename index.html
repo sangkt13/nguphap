@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IELTS GrammarLite</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#4F46E5',   // Indigo 600
+            secondary: '#10B981', // Emerald 500
+            accent: '#F59E0B',    // Amber 500
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F3F4F6; }
+    .fade-in { animation: fadeIn 0.5s ease-in-out; }
+    .slide-up { animation: slideUp 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex items-center cursor-pointer" onclick="app.goHome()">
+          <div class="bg-primary text-white p-2 rounded-lg font-bold text-xl mr-2">IG</div>
+          <span class="font-bold text-xl text-gray-900 tracking-tight">
+            IELTS Grammar<span class="text-primary">Lite</span>
+          </span>
+        </div>
+
+        <div class="hidden md:flex space-x-4 items-center">
+          <a href="#" onclick="app.goHome()" class="text-gray-900 hover:text-primary transition px-3 py-2 rounded-md font-medium">Trang chủ</a>
+          <a href="#" onclick="app.openRoadmap()" class="text-gray-500 hover:text-primary transition px-3 py-2 rounded-md font-medium">Lộ trình</a>
+          <a href="#" onclick="app.openStats()" class="text-gray-500 hover:text-primary transition px-3 py-2 rounded-md font-medium">Thống kê</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="app-container" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full"></main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t mt-auto">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <p class="text-center text-gray-500 text-sm">© 2026 IELTS GrammarLite. Learn grammar fast, use it immediately.</p>
+    </div>
+  </footer>
+
+  <script>
+    // =========================
+    // DATA: MANY GRAMMAR TOPICS
+    // =========================
+    const topics = [
+      // A1-A2 / Foundation
+      {
+        id: 1,
+        title: "Thì Hiện Tại Đơn (Present Simple)",
+        level: "Foundation (A1–A2) | IELTS 3.5–4.5",
+        icon: "🕒",
+        color: "bg-blue-100 text-blue-600",
+        desc: "Thói quen, sự thật hiển nhiên, lịch trình.",
+        theory: {
+          summary: "S + V(s/es) / do/does + not + V",
+          points: [
+            "<strong>Dùng khi:</strong> thói quen (every day), sự thật (Water boils at 100°C).",
+            "<strong>He/She/It:</strong> thêm -s/-es (watch → watches).",
+            "<strong>Phủ định:</strong> do/does + not + V; <strong>Hỏi:</strong> Do/Does + S + V?"
+          ],
+          example: "She <strong>works</strong> in a hospital. / <strong>Do</strong> you <strong>study</strong> every day?",
+          tip: "🔑 Mẹo: Thấy 'always/usually/often/sometimes' → nghĩ Present Simple."
+        },
+        quiz: [
+          { question: "He ______ to work by bus every day.", options: ["go", "goes", "going", "gone"], correct: 1 },
+          { question: "______ she like coffee?", options: ["Do", "Does", "Did", "Is"], correct: 1 }
+        ]
+      },
+      {
+        id: 2,
+        title: "Thì Hiện Tại Tiếp Diễn (Present Continuous)",
+        level: "Foundation (A2) | IELTS 4.0–5.0",
+        icon: "🏃",
+        color: "bg-cyan-100 text-cyan-700",
+        desc: "Hành động đang xảy ra ngay lúc nói / xu hướng hiện tại.",
+        theory: {
+          summary: "S + am/is/are + V-ing",
+          points: [
+            "<strong>Now / right now / at the moment</strong> → đang diễn ra.",
+            "<strong>Xu hướng:</strong> People are using more AI in learning.",
+            "<strong>Không dùng</strong> cho stative verbs (know, believe, like...) trong đa số trường hợp."
+          ],
+          example: "I <strong>am studying</strong> right now.",
+          tip: "🔑 Mẹo: Thấy 'now, currently, at the moment' → Present Continuous."
+        },
+        quiz: [
+          { question: "They ______ dinner at the moment.", options: ["cook", "cooks", "are cooking", "cooked"], correct: 2 },
+          { question: "I ______ (not) understand this question now.", options: ["am not understanding", "don't understand", "isn't understand", "not understand"], correct: 1 }
+        ]
+      },
+      {
+        id: 3,
+        title: "Thì Quá Khứ Đơn (Past Simple)",
+        level: "Foundation (A2) | IELTS 4.0–5.0",
+        icon: "⌛",
+        color: "bg-amber-100 text-amber-700",
+        desc: "Hành động kết thúc trong quá khứ, có mốc thời gian rõ.",
+        theory: {
+          summary: "S + V2/ed / did + not + V",
+          points: [
+            "<strong>Yesterday/last week/in 2020</strong> → quá khứ đơn.",
+            "<strong>Phủ định/hỏi:</strong> did + not + V / Did + S + V?",
+            "<strong>Irregular verbs:</strong> go→went, take→took..."
+          ],
+          example: "I <strong>went</strong> to Da Nang last year. / <strong>Did</strong> you <strong>see</strong> her?",
+          tip: "🔑 Mẹo: Có mốc thời gian quá khứ rõ → Past Simple."
+        },
+        quiz: [
+          { question: "We ______ football yesterday.", options: ["play", "played", "playing", "plays"], correct: 1 },
+          { question: "______ you visit Hue last summer?", options: ["Do", "Did", "Does", "Are"], correct: 1 }
+        ]
+      },
+
+      // IELTS core
+      {
+        id: 4,
+        title: "Thì Hiện Tại Hoàn Thành (Present Perfect)",
+        level: "IELTS 4.5–5.5",
+        icon: "⏳",
+        color: "bg-indigo-100 text-indigo-700",
+        desc: "Trải nghiệm, kết quả đến hiện tại, hành động bắt đầu quá khứ kéo dài đến nay.",
+        theory: {
+          summary: "S + have/has + V3/ed",
+          points: [
+            "<strong>Since/for:</strong> bắt đầu quá khứ → kéo dài đến hiện tại.",
+            "<strong>Already/yet/just:</strong> nhấn mạnh kết quả.",
+            "<strong>Không rõ thời gian</strong> trong quá khứ (experience)."
+          ],
+          example: "I <strong>have lived</strong> in Hanoi for 5 years.",
+          tip: "🔑 Thấy since/for/already/yet/just → Present Perfect."
+        },
+        quiz: [
+          { question: "I ______ my homework yet.", options: ["have finished", "haven't finished", "didn't finish", "not finish"], correct: 1 },
+          { question: "She ______ in London since 2010.", options: ["lived", "has lived", "lives", "living"], correct: 1 }
+        ]
+      },
+      {
+        id: 5,
+        title: "Thì Quá Khứ Hoàn Thành (Past Perfect)",
+        level: "IELTS 5.5–6.5",
+        icon: "⏮️",
+        color: "bg-slate-100 text-slate-700",
+        desc: "Hành động xảy ra trước một mốc/quá khứ khác.",
+        theory: {
+          summary: "S + had + V3/ed",
+          points: [
+            "Dùng khi có <strong>2 hành động quá khứ</strong>, cái xảy ra trước dùng Past Perfect.",
+            "Thường đi với <strong>before/after/by the time</strong>.",
+            "Kể chuyện trong Writing/Speaking giúp mạch thời gian rõ."
+          ],
+          example: "By the time I arrived, the meeting <strong>had started</strong>.",
+          tip: "🔑 Mẹo: 2 sự kiện quá khứ → cái trước dùng had + V3."
+        },
+        quiz: [
+          { question: "She ______ (finish) her work before she went home.", options: ["has finished", "had finished", "finished", "finishes"], correct: 1 },
+          { question: "By the time we got there, the movie ______.", options: ["started", "had started", "has started", "starts"], correct: 1 }
+        ]
+      },
+      {
+        id: 6,
+        title: "Câu Bị Động (Passive Voice)",
+        level: "IELTS 5.5–6.5",
+        icon: "🔄",
+        color: "bg-purple-100 text-purple-700",
+        desc: "Nhấn mạnh hành động/đối tượng bị tác động; cực hay dùng trong Task 1 Process.",
+        theory: {
+          summary: "Object + be + V3 (+ by S)",
+          points: [
+            "<strong>Hiện tại đơn:</strong> am/is/are + V3.",
+            "<strong>Quá khứ đơn:</strong> was/were + V3.",
+            "<strong>Hiện tại tiếp diễn:</strong> am/is/are being + V3."
+          ],
+          example: "The report <strong>was written</strong> by John.",
+          tip: "🔑 Task 1 Process: ưu tiên bị động để mô tả quy trình."
+        },
+        quiz: [
+          { question: "The house ______ by fire.", options: ["destroy", "was destroyed", "destroyed", "destroying"], correct: 1 },
+          { question: "A new bridge ______ built across the river right now.", options: ["is", "is being", "was", "has been"], correct: 1 }
+        ]
+      },
+      {
+        id: 7,
+        title: "Mệnh Đề Quan Hệ (Relative Clauses)",
+        level: "IELTS 6.0+",
+        icon: "🔗",
+        color: "bg-green-100 text-green-700",
+        desc: "Nối câu, tăng độ phức tạp và mạch lạc trong Speaking/Writing.",
+        theory: {
+          summary: "who/which/that/whose (+ clause)",
+          points: [
+            "<strong>who:</strong> người | <strong>which:</strong> vật | <strong>whose:</strong> sở hữu.",
+            "<strong>Defining</strong> (không có dấu phẩy) vs <strong>Non-defining</strong> (có dấu phẩy).",
+            "Có thể <strong>lược bỏ</strong> đại từ quan hệ khi nó làm tân ngữ (The book (that) I bought...)."
+          ],
+          example: "The man <strong>who</strong> spoke to you is my teacher.",
+          tip: "🔑 Mẹo: Relative clauses giúp tăng Grammatical Range."
+        },
+        quiz: [
+          { question: "This is the book ______ I bought yesterday.", options: ["who", "where", "which", "whose"], correct: 2 },
+          { question: "Do you know the girl ______ mother is a famous singer?", options: ["who", "whom", "whose", "that"], correct: 2 }
+        ]
+      },
+      {
+        id: 8,
+        title: "Câu Điều Kiện (Conditionals 0-1-2-3)",
+        level: "IELTS 6.0+",
+        icon: "🧠",
+        color: "bg-rose-100 text-rose-700",
+        desc: "Nói về sự thật, khả năng, giả định, hoặc điều tiếc nuối trong quá khứ.",
+        theory: {
+          summary: "If + clause, main clause (0/1/2/3)",
+          points: [
+            "<strong>Zero:</strong> If + Present, Present (sự thật).",
+            "<strong>First:</strong> If + Present, will + V (khả năng).",
+            "<strong>Second:</strong> If + Past, would + V (giả định).",
+            "<strong>Third:</strong> If + had + V3, would have + V3 (tiếc nuối)."
+          ],
+          example: "If I <strong>had studied</strong>, I <strong>would have passed</strong>.",
+          tip: "🔑 Mẹo: 'would have + V3' → thường là Conditional 3."
+        },
+        quiz: [
+          { question: "If it rains, we ______ at home.", options: ["stay", "will stay", "would stay", "stayed"], correct: 1 },
+          { question: "If I ______ you, I would apologize.", options: ["am", "was", "were", "be"], correct: 2 }
+        ]
+      },
+      {
+        id: 9,
+        title: "Modal Verbs (Can/Could/May/Might/Must/Should)",
+        level: "IELTS 5.5–7.0",
+        icon: "🎛️",
+        color: "bg-teal-100 text-teal-700",
+        desc: "Diễn đạt khả năng, lời khuyên, nghĩa vụ, suy đoán.",
+        theory: {
+          summary: "Modal + V (bare infinitive)",
+          points: [
+            "<strong>Should</strong> = lời khuyên; <strong>must</strong> = bắt buộc.",
+            "<strong>may/might</strong> = có thể (khả năng thấp hơn).",
+            "<strong>could</strong> = khả năng/quá khứ/đề nghị lịch sự."
+          ],
+          example: "You <strong>should</strong> sleep earlier. / It <strong>might</strong> rain.",
+          tip: "🔑 Mẹo: Modal luôn đi với V nguyên mẫu (không 'to')."
+        },
+        quiz: [
+          { question: "You ______ wear a helmet when riding a motorbike.", options: ["might", "should", "could", "may"], correct: 1 },
+          { question: "It ______ be true, but I'm not sure.", options: ["must", "might", "should", "will"], correct: 1 }
+        ]
+      },
+      {
+        id: 10,
+        title: "Reported Speech (Câu gián tiếp)",
+        level: "IELTS 6.0+",
+        icon: "🗣️",
+        color: "bg-orange-100 text-orange-700",
+        desc: "Tường thuật lại lời nói/câu hỏi.",
+        theory: {
+          summary: "S + said (that) + clause (backshift)",
+          points: [
+            "Thường <strong>lùi thì</strong>: present → past; will → would; can → could.",
+            "<strong>Yes/No questions:</strong> asked if/whether + clause.",
+            "<strong>Wh- questions:</strong> asked + wh-word + clause (không đảo trợ động từ)."
+          ],
+          example: 'He said, "I am tired." → He said (that) he <strong>was</strong> tired.',
+          tip: "🔑 Mẹo: Câu hỏi gián tiếp: không đảo 'do/does/did'."
+        },
+        quiz: [
+          { question: 'She said she ______ busy.', options: ["is", "was", "were", "be"], correct: 1 },
+          { question: 'He asked ______ I liked coffee.', options: ["that", "if", "to", "because"], correct: 1 }
+        ]
+      },
+      {
+        id: 11,
+        title: "Gerunds & Infinitives (V-ing / To V)",
+        level: "IELTS 5.5–7.0",
+        icon: "🧩",
+        color: "bg-lime-100 text-lime-700",
+        desc: "Chọn đúng V-ing hay to V theo động từ/cấu trúc.",
+        theory: {
+          summary: "Enjoy + V-ing | Decide + to V | Stop + V-ing",
+          points: [
+            "<strong>V-ing</strong> sau: enjoy, avoid, mind, finish, suggest...",
+            "<strong>to V</strong> sau: decide, want, plan, hope, need...",
+            "<strong>Stop</strong>: stop smoking (dừng hút) vs stop to smoke (dừng lại để hút)."
+          ],
+          example: "I enjoy <strong>reading</strong>. / I decided <strong>to study</strong> harder.",
+          tip: "🔑 Mẹo: Luyện theo cụm động từ cố định, không học rời rạc."
+        },
+        quiz: [
+          { question: "I decided ______ abroad next year.", options: ["go", "to go", "going", "went"], correct: 1 },
+          { question: "He suggested ______ earlier.", options: ["leave", "to leave", "leaving", "left"], correct: 2 }
+        ]
+      },
+      {
+        id: 12,
+        title: "Articles (a/an/the/zero article)",
+        level: "IELTS 5.0–7.0",
+        icon: "📰",
+        color: "bg-fuchsia-100 text-fuchsia-700",
+        desc: "Một trong các lỗi phổ biến nhất của người học Việt Nam.",
+        theory: {
+          summary: "a/an = lần đầu/không xác định | the = xác định/đã biết",
+          points: [
+            "<strong>a/an</strong>: nói chung, lần đầu nhắc, nghề nghiệp (a doctor).",
+            "<strong>the</strong>: vật đã biết, duy nhất, cụ thể (the sun, the book you gave me).",
+            "<strong>Zero</strong>: danh từ số nhiều chung chung / không đếm được (Books are useful. / Water is essential.)"
+          ],
+          example: "She is <strong>a</strong> teacher. The teacher I met yesterday was kind.",
+          tip: "🔑 Mẹo: 'the' = người nghe biết bạn đang nói cái nào."
+        },
+        quiz: [
+          { question: "I bought ______ book you recommended.", options: ["a", "an", "the", "Ø"], correct: 2 },
+          { question: "______ water is necessary for life.", options: ["A", "An", "The", "Ø"], correct: 3 }
+        ]
+      }
+    ];
+
+    // =========================
+    // APP
+    // =========================
+    const app = {
+      container: document.getElementById('app-container'),
+
+      init() { this.renderHome(); },
+
+      goHome() { this.renderHome(); },
+
+      openRoadmap() {
+        this.container.innerHTML = `
+          <div class="fade-in">
+            <button onclick="app.goHome()" class="mb-6 flex items-center text-gray-500 hover:text-primary transition">
+              <span class="mr-2">←</span> Quay lại
+            </button>
+
+            <div class="bg-white rounded-2xl shadow-xl p-6">
+              <h2 class="text-2xl font-bold mb-3">Lộ trình gợi ý</h2>
+              <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                <li><strong>Foundation:</strong> Present Simple → Present Continuous → Past Simple</li>
+                <li><strong>Core IELTS:</strong> Present Perfect → Passive → Relative Clauses</li>
+                <li><strong>Band 6+:</strong> Conditionals → Modals → Reported Speech</li>
+                <li><strong>Band 7:</strong> Gerunds/Infinitives → Articles (polish) → nâng cao theo Writing/Speaking</li>
+              </ol>
+              <p class="mt-4 text-sm text-gray-500">Bạn có thể dùng nút AI ở mỗi bài để tạo bài tập mới theo đúng điểm ngữ pháp.</p>
+            </div>
+          </div>
+        `;
+      },
+
+      openStats() {
+        // Simple stats from local quiz set (demo)
+        const totalTopics = topics.length;
+        const totalQuestions = topics.reduce((acc, t) => acc + (t.quiz?.length || 0), 0);
+        this.container.innerHTML = `
+          <div class="fade-in">
+            <button onclick="app.goHome()" class="mb-6 flex items-center text-gray-500 hover:text-primary transition">
+              <span class="mr-2">←</span> Quay lại
+            </button>
+
+            <div class="bg-white rounded-2xl shadow-xl p-6">
+              <h2 class="text-2xl font-bold mb-4">Thống kê</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 rounded-xl bg-gray-50 border">
+                  <p class="text-sm text-gray-500">Số chủ đề</p>
+                  <p class="text-3xl font-extrabold text-gray-900 mt-1">${totalTopics}</p>
+                </div>
+                <div class="p-4 rounded-xl bg-gray-50 border">
+                  <p class="text-sm text-gray-500">Tổng số câu hiện có</p>
+                  <p class="text-3xl font-extrabold text-gray-900 mt-1">${totalQuestions}</p>
+                </div>
+              </div>
+              <p class="mt-4 text-sm text-gray-500">Muốn thống kê điểm theo user? Khi đó cần lưu dữ liệu (localStorage / database).</p>
+            </div>
+          </div>
+        `;
+      },
+
+      renderHome() {
+        let html = `
+          <div class="text-center mb-12 fade-in">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+              Học <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">Ngữ pháp IELTS</span> nhanh
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+              Nhiều cấu trúc trọng điểm + bài tập. Bấm <strong>AI</strong> để tạo bài tập mới theo từng chủ đề.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 slide-up">
+        `;
+
+        topics.forEach(topic => {
+          html += `
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer overflow-hidden border border-gray-100"
+                 onclick="app.loadTopic(${topic.id})">
+              <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                  <div class="${topic.color} w-12 h-12 rounded-full flex items-center justify-center text-2xl">
+                    ${topic.icon}
+                  </div>
+                  <span class="text-xs font-bold uppercase tracking-wide bg-gray-100 text-gray-600 px-2 py-1 rounded">${topic.level}</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">${topic.title}</h3>
+                <p class="text-gray-500 text-sm mb-4">${topic.desc}</p>
+                <div class="w-full bg-gray-50 text-primary text-center py-2 rounded-lg font-medium hover:bg-primary hover:text-white transition">
+                  Bắt đầu học →
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        html += `</div>`;
+        this.container.innerHTML = html;
+      },
+
+      loadTopic(id) {
+        const topic = topics.find(t => t.id === id);
+        if (!topic) return;
+
+        const html = `
+          <div class="fade-in">
+            <button onclick="app.goHome()" class="mb-6 flex items-center text-gray-500 hover:text-primary transition">
+              <span class="mr-2">←</span> Quay lại danh sách
+            </button>
+
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden min-h-[520px]">
+              <div class="md:flex h-full">
+                <div class="md:w-1/3 bg-gray-50 p-6 border-r border-gray-100">
+                  <h2 class="text-2xl font-bold text-gray-900 mb-2">${topic.title}</h2>
+                  <p class="text-gray-500 text-sm mb-6">${topic.desc}</p>
+
+                  <div class="space-y-2">
+                    <button id="btn-theory" onclick="app.switchTab('theory', ${topic.id})"
+                      class="w-full text-left px-4 py-3 rounded-lg font-medium bg-white shadow-sm border border-gray-200 text-primary">
+                      📖 Lý thuyết cốt lõi
+                    </button>
+
+                    <button id="btn-practice" onclick="app.switchTab('practice', ${topic.id})"
+                      class="w-full text-left px-4 py-3 rounded-lg font-medium text-gray-600 hover:bg-white hover:shadow-sm transition">
+                      ✍️ Bài tập thực hành
+                    </button>
+                  </div>
+
+                  <div class="mt-6 p-4 rounded-xl bg-white border">
+                    <p class="text-sm text-gray-500 mb-2">Gợi ý học nhanh</p>
+                    <p class="text-sm text-gray-700">Học <strong>công thức</strong> → đọc <strong>cách dùng</strong> → làm 2 câu → bấm <strong>AI</strong> tạo thêm 5 câu.</p>
+                  </div>
+                </div>
+
+                <div class="md:w-2/3 p-8" id="content-area"></div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        this.container.innerHTML = html;
+        this.switchTab('theory', id);
+      },
+
+      switchTab(tabName, topicId) {
+        const topic = topics.find(t => t.id === topicId);
+        const contentArea = document.getElementById('content-area');
+        const btnTheory = document.getElementById('btn-theory');
+        const btnPractice = document.getElementById('btn-practice');
+
+        if (tabName === 'theory') {
+          btnTheory.className = "w-full text-left px-4 py-3 rounded-lg font-medium bg-white shadow-sm border border-gray-200 text-primary ring-1 ring-primary/20";
+          btnPractice.className = "w-full text-left px-4 py-3 rounded-lg font-medium text-gray-600 hover:bg-white hover:shadow-sm transition";
+
+          contentArea.innerHTML = `
+            <div class="fade-in space-y-6">
+              <div class="bg-indigo-50 border-l-4 border-primary p-4 rounded-r-lg">
+                <h3 class="text-lg font-bold text-primary mb-1">Công thức chung</h3>
+                <p class="text-2xl font-mono text-gray-800">${topic.theory.summary}</p>
+              </div>
+
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Cách sử dụng</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 leading-relaxed">
+                  ${topic.theory.points.map(point => `<li>${point}</li>`).join('')}
+                </ul>
+              </div>
+
+              <div class="bg-gray-100 p-4 rounded-lg">
+                <h3 class="font-bold text-gray-900">Ví dụ minh họa:</h3>
+                <p class="text-gray-700 italic mt-1">"${topic.theory.example}"</p>
+              </div>
+
+              <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg flex items-start">
+                <span class="text-2xl mr-3">💡</span>
+                <p class="text-yellow-800 text-sm pt-1">${topic.theory.tip}</p>
+              </div>
+            </div>
+          `;
+        } else {
+          btnPractice.className = "w-full text-left px-4 py-3 rounded-lg font-medium bg-white shadow-sm border border-gray-200 text-secondary ring-1 ring-secondary/20";
+          btnTheory.className = "w-full text-left px-4 py-3 rounded-lg font-medium text-gray-600 hover:bg-white hover:shadow-sm transition";
+
+          let quizHtml = `
+            <div class="fade-in">
+              <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
+                <h3 class="text-xl font-bold text-gray-900">Bài tập vận dụng</h3>
+
+                <button type="button"
+                  onclick="app.generateAIQuiz(${topic.id})"
+                  class="bg-primary hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-lg transition shadow">
+                  ✨ Tạo bài tập bằng AI
+                </button>
+              </div>
+
+              <div id="ai-status" class="hidden mb-4 p-3 rounded-lg text-sm"></div>
+
+              <form id="quiz-form">
+          `;
+
+          topic.quiz.forEach((q, index) => {
+            quizHtml += `
+              <div class="mb-6 p-4 border rounded-lg bg-gray-50">
+                <p class="font-semibold text-gray-800 mb-3">Câu ${index + 1}: ${q.question}</p>
+                <div class="space-y-2">
+            `;
+
+            q.options.forEach((opt, optIndex) => {
+              quizHtml += `
+                <label class="flex items-center space-x-3 cursor-pointer p-2 rounded hover:bg-white transition">
+                  <input type="radio" name="q${index}" value="${optIndex}" class="form-radio text-primary h-4 w-4">
+                  <span class="text-gray-700">${opt}</span>
+                </label>
+              `;
+            });
+
+            quizHtml += `</div></div>`;
+          });
+
+          quizHtml += `
+              <div id="result-area" class="hidden mb-4 p-4 rounded-lg"></div>
+
+              <button type="button" onclick="app.checkAnswers(${topic.id})"
+                class="w-full md:w-auto bg-secondary hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg transition shadow-lg transform hover:scale-105">
+                Kiểm tra đáp án
+              </button>
+            </form>
+          </div>
+          `;
+
+          contentArea.innerHTML = quizHtml;
+        }
+      },
+
+      checkAnswers(topicId) {
+        const topic = topics.find(t => t.id === topicId);
+        let score = 0;
+        const total = topic.quiz.length;
+        const form = document.getElementById('quiz-form');
+
+        topic.quiz.forEach((q, index) => {
+          const selected = form.querySelector(`input[name="q${index}"]:checked`);
+          const container = form.querySelectorAll('.mb-6')[index];
+
+          // reset
+          container.classList.remove('bg-green-50', 'bg-red-50', 'border-green-300', 'border-red-300');
+          const icon = container.querySelector('.result-icon');
+          if (icon) icon.remove();
+
+          if (selected && parseInt(selected.value) === q.correct) {
+            score++;
+            container.classList.add('bg-green-50', 'border-green-300', 'border');
+            container.insertAdjacentHTML('beforeend', '<p class="text-green-600 font-bold mt-2 text-sm result-icon">✓ Chính xác</p>');
+          } else {
+            container.classList.add('bg-red-50', 'border-red-300', 'border');
+            container.insertAdjacentHTML('beforeend', `<p class="text-red-500 font-bold mt-2 text-sm result-icon">✗ Sai rồi. Đáp án đúng: ${q.options[q.correct]}</p>`);
+          }
+        });
+
+        const resultArea = document.getElementById('result-area');
+        resultArea.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-yellow-100', 'text-yellow-800');
+
+        if (score === total) {
+          resultArea.classList.add('bg-green-100', 'text-green-800');
+          resultArea.innerHTML = `<strong>Tuyệt vời!</strong> Bạn đã trả lời đúng ${score}/${total} câu.`;
+        } else {
+          resultArea.classList.add('bg-yellow-100', 'text-yellow-800');
+          resultArea.innerHTML = `<strong>Cố lên!</strong> Bạn đã đúng ${score}/${total} câu. Hãy xem lại lý thuyết nhé.`;
+        }
+      },
+
+      // =========================
+      // AI: Generate quiz via /api/generate-quiz
+      // =========================
+      async generateAIQuiz(topicId) {
+        const topic = topics.find(t => t.id === topicId);
+        const status = document.getElementById('ai-status');
+
+        const setStatus = (type, msg) => {
+          status.classList.remove(
+            'hidden',
+            'bg-yellow-100', 'text-yellow-800',
+            'bg-red-100', 'text-red-800',
+            'bg-green-100', 'text-green-800'
+          );
+          if (type === 'loading') status.classList.add('bg-yellow-100', 'text-yellow-800');
+          if (type === 'error') status.classList.add('bg-red-100', 'text-red-800');
+          if (type === 'success') status.classList.add('bg-green-100', 'text-green-800');
+          status.innerHTML = msg;
+        };
+
+        try {
+          setStatus('loading', '⏳ Đang tạo bài tập bằng AI...');
+
+          const res = await fetch('/api/generate-quiz', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              topicTitle: topic.title,
+              level: topic.level,
+              theorySummary: topic.theory.summary,
+              points: topic.theory.points,
+              numQuestions: 5
+            })
+          });
+
+          if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(errText || `HTTP ${res.status}`);
+          }
+
+          const data = await res.json();
+          if (!data?.quiz?.length) throw new Error('AI không trả về quiz hợp lệ.');
+
+          topic.quiz = data.quiz;
+          this.switchTab('practice', topicId);
+
+          const newStatus = document.getElementById('ai-status');
+          if (newStatus) {
+            newStatus.classList.remove('hidden');
+            newStatus.classList.add('bg-green-100', 'text-green-800');
+            newStatus.innerHTML = `✅ Đã tạo ${data.quiz.length} câu mới cho: <strong>${topic.title}</strong>`;
+          }
+
+        } catch (e) {
+          setStatus('error', `❌ Lỗi tạo bài tập AI: ${e.message}`);
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => app.init());
+  </script>
+</body>
+</html>
